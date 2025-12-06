@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-service
+  namespace: java-microservice
+spec:
+  selector:
+    matchLabels:
+      app: inventory-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: inventory-service
+    spec:
+      containers:
+      - name: inventory-service
+        image: bomeravi/inventory-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://mysql-inventory-service:3306/inventory_service
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-service
+  namespace: java-microservice
+spec:
+  selector:
+    app: inventory-service
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080

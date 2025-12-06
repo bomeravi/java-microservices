@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  namespace: java-microservice
+spec:
+  selector:
+    matchLabels:
+      app: product-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+      - name: product-service
+        image: bomeravi/product-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATA_MONGODB_URI
+          value: mongodb://root:password@mongodb-product-service:27017/product-service?authSource=admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: java-microservice
+spec:
+  selector:
+    app: product-service
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080

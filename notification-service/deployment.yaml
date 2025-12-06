@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: java-microservice
+spec:
+  selector:
+    matchLabels:
+      app: notification-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+      - name: notification-service
+        image: bomeravi/notification-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          value: broker:29092
+        - name: SPRING_MAIL_HOST
+          value: sandbox.smtp.mailtrap.io
+        - name: SPRING_MAIL_PORT
+          value: "2525"
+        - name: SPRING_MAIL_USERNAME
+          value: username # Fill with actual value if needed, placeholder kept from docker-compose
+        - name: SPRING_MAIL_PASSWORD
+          value: password # Fill with actual value if needed, placeholder kept from docker-compose
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: java-microservice
+spec:
+  selector:
+    app: notification-service
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080

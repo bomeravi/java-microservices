@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-order-service
+  namespace: java-microservice
+spec:
+  selector:
+    matchLabels:
+      app: mysql-order-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql-order-service
+    spec:
+      containers:
+      - name: mysql-order-service
+        image: mysql:8.3.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: mysql
+        - name: MYSQL_DATABASE
+          value: order_service
+        volumeMounts:
+        - name: mysql-order-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-order-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-order-service
+  namespace: java-microservice
+spec:
+  selector:
+    app: mysql-order-service
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306

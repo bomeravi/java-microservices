@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-inventory-service
+  namespace: java-microservice
+spec:
+  selector:
+    matchLabels:
+      app: mysql-inventory-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql-inventory-service
+    spec:
+      containers:
+      - name: mysql-inventory-service
+        image: mysql:8.3.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: mysql
+        - name: MYSQL_DATABASE
+          value: inventory_service
+        volumeMounts:
+        - name: mysql-inventory-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-inventory-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-inventory-service
+  namespace: java-microservice
+spec:
+  selector:
+    app: mysql-inventory-service
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306

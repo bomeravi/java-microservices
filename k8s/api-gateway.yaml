@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: java-microservice
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: bomeravi/api-gateway
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PRODUCT_SERVICE_URL
+          value: http://product-service:8080
+        - name: ORDER_SERVICE_URL
+          value: http://order-service:8080
+        - name: INVENTORY_SERVICE_URL
+          value: http://inventory-service:8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: java-microservice
+spec:
+  selector:
+    app: api-gateway
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080 # Optional: fix nodePort for easier access

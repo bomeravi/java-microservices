@@ -105,8 +105,7 @@ $RECYCLE.BIN/
 *~
 
 # Kubernetes
-k8s/
-*.yaml
+
 !k8s/example-*.yaml
 
 # Docker

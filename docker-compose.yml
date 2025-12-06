@@ -3,7 +3,7 @@ version: '4'
 services:
   # Product Service (Port 8081)
   product-service:
-    image: ankurgangwar/product-service:latest
+    image: bomeravi/product-service:latest
     container_name: product-service
     ports:
       - "8081:8080"  # External:8081 -> Container:8080
@@ -26,7 +26,7 @@ services:
 
   # Inventory Service (Port 8082)
   inventory-service:
-    image: ankurgangwar/inventory-service:latest
+    image: bomeravi/inventory-service:latest
     container_name: inventory-service
     ports:
       - "8082:8080"  # External:8082 -> Container:8080
@@ -50,7 +50,7 @@ services:
   
   # Order Service (Port 8083)
   order-service:
-    image: ankurgangwar/order-service:latest
+    image: bomeravi/order-service:latest
     container_name: order-service
     ports:
       - "8083:8080"  # External:8083 -> Container:8080
@@ -78,7 +78,7 @@ services:
   
   # Notification Service (Port 8084)
   notification-service:
-    image: ankurgangwar/notification-service:latest
+    image: bomeravi/notification-service:latest
     container_name: notification-service
     ports:
       - "8084:8080"  # External:8084 -> Container:8080
@@ -93,7 +93,7 @@ services:
   
   # API Gateway (Port 8080)
   api-gateway:
-    image: ankurgangwar/api-gateway
+    image: bomeravi/api-gateway
     container_name: api-gateway
     ports:
       - "8080:8080"  # External:8080 -> Container:8080
